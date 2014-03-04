@@ -71,10 +71,12 @@
                 <ul class="nav nav-list">
                     <li class="nav-header">Overview</li>
                               
-      <li class="active">
+      <li>
   
-            <a href="#"><i class="none"></i>Introduction</a>
-          </li>
+                          <a href="index.html" title="Introduction">
+          <i class="none"></i>
+        Introduction</a>
+            </li>
                               <li class="nav-header">Examples</li>
                               
       <li>
@@ -112,12 +114,10 @@
         MDC Profiling</a>
             </li>
                 
-      <li>
+      <li class="active">
   
-                          <a href="hostname-lookup.html" title="Hostname Lookup">
-          <i class="none"></i>
-        Hostname Lookup</a>
-            </li>
+            <a href="#"><i class="none"></i>Hostname Lookup</a>
+          </li>
                               <li class="nav-header">Project Documentation</li>
                               
       <li>
@@ -127,83 +127,13 @@
         JavaDoc</a>
             </li>
                               <li class="nav-header">Project Documentation</li>
-                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                  
       <li>
   
                           <a href="project-info.html" title="Project Information">
-          <i class="icon-chevron-down"></i>
+          <i class="icon-chevron-right"></i>
         Project Information</a>
-                    <ul class="nav nav-list">
-                    
-      <li class="active">
-  
-            <a href="#"><i class="none"></i>About</a>
-          </li>
-                    
-      <li>
-  
-                          <a href="plugin-management.html" title="Plugin Management">
-          <i class="none"></i>
-        Plugin Management</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="distribution-management.html" title="Distribution Management">
-          <i class="none"></i>
-        Distribution Management</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="dependency-info.html" title="Dependency Information">
-          <i class="none"></i>
-        Dependency Information</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="dependencies.html" title="Dependencies">
-          <i class="none"></i>
-        Dependencies</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="source-repository.html" title="Source Repository">
-          <i class="none"></i>
-        Source Repository</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="issue-tracking.html" title="Issue Tracking">
-          <i class="none"></i>
-        Issue Tracking</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="integration.html" title="Continuous Integration">
-          <i class="none"></i>
-        Continuous Integration</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="team-list.html" title="Project Team">
-          <i class="none"></i>
-        Project Team</a>
-            </li>
-                    
-      <li>
-  
-                          <a href="project-summary.html" title="Project Summary">
-          <i class="none"></i>
-        Project Summary</a>
-            </li>
-              </ul>
-        </li>
+                  </li>
                                                                                     
       <li>
   
@@ -241,45 +171,37 @@
                 
         <div id="bodyColumn"  class="span9" >
                                   
-            <h1>Introduction <a class="externalLink" href="https://snap-ci.com/projects/mp911de/logstash-gelf/build_history"><img src="https://snap-ci.com/POmpG5OoXqifv_rjGSisv-wer9OYazjEtkuDT_7rrPA/build_image" alt="Build Status" /></a></h1>
-<p>logstash logging connectors (logstash-gelf)</p>
-<p>Provides logging to logstash using the Graylog Extended Logging Format (GELF). This implementation comes with support for three areas:</p>
+            <div class="section">
+<h2>Hostname-Lookup<a name="Hostname-Lookup"></a></h2>
+<p>logstash-gelf contains a class (biz.paluch.logging.RuntimeContainer) which performs a hostname resolution on the first use of the framework. This can take some time, especially, when your DNS is not set up for all host addresses.</p>
+<p>The lookup is performed in that way:</p>
+
+<ol style="list-style-type: decimal">
+  
+<li>Retrieve all <tt>InetAddress</tt>es from all <tt>NetworkInterface</tt>s</li>
+  
+<li>Skip <tt>LoopbackAdress</tt>es</li>
+  
+<li>Skip all <tt>InetAddress</tt>es which cannot be resolved to a FQDN (<tt>HostAddress</tt> equals <tt>CanonicalHostName</tt>)</li>
+  
+<li>Use first <tt>InetAddress</tt> that passes that rules.</li>
+  
+<li>If none passes, use <tt>LocalHost</tt> <tt>InetAddress</tt></li>
+  
+<li>If the lookup fails, hostname and FQDN hostname will be set to &#x201c;unknown&#x201d;</li>
+</ol></div>
+<div class="section">
+<h2>Bypassing Hostname-Lookup<a name="Bypassing_Hostname-Lookup"></a></h2>
+<p>You can bypass that process by setting some SystemProperties. Set <tt>logstash-gelf.skipHostnameResolution</tt> to <tt>true</tt> to bypass the resolution. If you&#x2019;ve set the <tt>originHost</tt> property on your logger, so the properties value will be used anyway. If you didn&#x2019;t set the <tt>originHost</tt> property, and lookup is disabled, the value &#x201c;unknown&#x201d; will be used as hostname.</p></div>
+<div class="section">
+<h2>Default/Fallback Values for Hostname-Lookup<a name="DefaultFallback_Values_for_Hostname-Lookup"></a></h2>
 
 <ul>
   
-<li><a href="examples/jul.html">Java Util Logging</a></li>
+<li>Set <tt>logstash-gelf.hostname</tt> to use a fixed hostname (simple). This property can be handy in case the lookup runs into IO Exceptions.</li>
   
-<li><a href="examples/log4j-1.2.x.html">log4j 1.2.x</a></li>
-  
-<li><a href="examples/log4j-2.x.html">log4j 2.x</a></li>
-  
-<li>JBoss 7 (mix of Java Util Logging with log4j MDC)</li>
-  
-<li><a href="examples/logback.html">Logback</a></li>
-</ul>
-<p><a class="externalLink" href="https://github.com/mp911de/configurator-maven-plugin/zipball/master">Download ZIP File</a>  <a class="externalLink" href="https://github.com/mp911de/configurator-maven-plugin/tarball/master">Download TAR Ball</a></p>
-<div class="section">
-<h2>How to get<a name="How_to_get"></a></h2>
-<p>Maven:</p>
-
-<div class="source">
-<pre>&lt;dependency&gt;
-    &lt;groupId&gt;biz.paluch.logging&lt;/groupId&gt;
-    &lt;artifactId&gt;logstash-gelf&lt;/artifactId&gt;
-    &lt;version&gt;1.3.1&lt;/version&gt;
-&lt;/dependency&gt;
-</pre></div>
-<p>JBoss Module Download:</p>
-
-<div class="source">
-<pre>&lt;dependency&gt;
-    &lt;groupId&gt;biz.paluch.logging&lt;/groupId&gt;
-    &lt;artifactId&gt;logstash-gelf&lt;/artifactId&gt;
-    &lt;version&gt;1.3.1&lt;/version&gt;
-    &lt;classifier&gt;logging-module&lt;/classifier&gt;
-&lt;/dependency&gt;
-</pre></div>
-<p>or <a class="externalLink" href="http://search.maven.org/remotecontent?filepath=biz/paluch/logging/logstash-gelf/1.3.1/logstash-gelf-1.3.1-logging-module.zip">http://search.maven.org/remotecontent?filepath=biz/paluch/logging/logstash-gelf/1.3.1/logstash-gelf-1.3.1-logging-module.zip</a></p></div>
+<li>Set <tt>logstash-gelf.fqdn.hostname</tt> to use a fixed hostname (fully qualified). This property can be handy in case the lookup runs into IO Exceptions.</li>
+</ul></div>
                   </div>
             </div>
           </div>
