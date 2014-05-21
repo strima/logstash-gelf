@@ -5,6 +5,7 @@ import java.util.logging.Filter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import biz.paluch.logging.gelf.GelfMessageAssembler;
 import biz.paluch.logging.gelf.LogMessageField;
@@ -43,6 +44,9 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
 
     protected GelfSender gelfSender;
     protected GelfMessageAssembler gelfMessageAssembler;
+    private boolean logUnsent;
+    
+    private static final Logger UNSENT_LOGGER = Logger.getLogger("UNSENT");
 
     public GelfLogHandler() {
         gelfMessageAssembler = createGelfMessageAssembler();
@@ -67,6 +71,12 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
         } catch (final Exception e) {
             // ignore
         }
+        
+        final String logUnsentString = propertyProvider.getProperty("logUnsent");
+        if(logUnsentString != null) {
+            setLogUnsent(Boolean.parseBoolean(logUnsentString));
+        }
+         
         // This only used for testing
         final String testSender = propertyProvider.getProperty("testSenderClass");
         try {
@@ -77,6 +87,8 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
         } catch (final Exception e) {
             // ignore
         }
+        
+        
 
     }
 
@@ -106,6 +118,9 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
 
             if (null == gelfSender || !gelfSender.sendMessage(message)) {
                 reportError("Could not send GELF message", null, ErrorManager.WRITE_FAILURE);
+                if(logUnsent) {
+                    UNSENT_LOGGER.log(record);
+                }
             }
         } catch (Exception e) {
             reportError("Could not send GELF message: " + e.getMessage(), e, ErrorManager.FORMAT_FAILURE);
@@ -219,6 +234,14 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
 
     public void setMaximumMessageSize(int maximumMessageSize) {
         gelfMessageAssembler.setMaximumMessageSize(maximumMessageSize);
+    }
+    
+    public boolean isLogUnsent() {
+        return logUnsent;
+    }
+
+    public void setLogUnsent(boolean logUnsent) {
+        this.logUnsent = logUnsent;
     }
 
     public void setTestSenderClass(String testSender) {

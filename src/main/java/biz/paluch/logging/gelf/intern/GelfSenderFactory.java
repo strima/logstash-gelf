@@ -10,7 +10,7 @@ import java.util.ServiceLoader;
 
 import biz.paluch.logging.gelf.GelfMessageAssembler;
 import biz.paluch.logging.gelf.intern.sender.DefaultGelfSenderProvider;
-import biz.paluch.logging.gelf.intern.sender.RedisGelfSenderProvider;
+import biz.paluch.logging.gelf.intern.sender.redis.RedisGelfSenderProvider;
 
 /**
  * @author <a href="mailto:mpaluch@paluch.biz">Mark Paluch</a>
