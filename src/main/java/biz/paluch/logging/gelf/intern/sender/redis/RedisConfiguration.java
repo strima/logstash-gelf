@@ -74,6 +74,5 @@ public enum RedisConfiguration {
         return Boolean.parseBoolean(System.getProperty("logging.gelf.activateunsentlogger","false"));
     }
     
-    
-
+   
 }
