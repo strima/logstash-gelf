@@ -36,18 +36,18 @@ public enum AsyncLogging implements AsyncLoggingMBean {
 
     @Override
     public String getStrategy() {
-        return System.getProperty("itsv.logging.async.strategy", "disruptor");
+        return System.getProperty("gelf.logging.async.strategy", "disruptor");
     }
     
    
     @Override
     public int getNumberOfParallelWorkers() {
-        return Integer.parseInt(System.getProperty("itsv.logging.async.parallelworker", "8"));
+        return Integer.parseInt(System.getProperty("gelf.logging.async.parallelworker", "8"));
     }
 
     @Override
     public int getBufferSize() {
-        return Integer.parseInt(System.getProperty("itsv.logging.async.buffersize", "1024"));
+        return Integer.parseInt(System.getProperty("gelf.logging.async.buffersize", "1024"));
     }
 
     @Override
@@ -61,9 +61,9 @@ public enum AsyncLogging implements AsyncLoggingMBean {
     }
 
     private void jmxRegister() {
-        if(Boolean.parseBoolean(System.getProperty("itsv.logging.async.jmxEnabled", "true"))) {
+        if(Boolean.parseBoolean(System.getProperty("gelf.logging.async.jmxEnabled", "true"))) {
             try {
-                ObjectName oname = new ObjectName(System.getProperty("logging.async.jmxObjectName", "at.itsv:type=Logging,name=AsyncLogging"));
+                ObjectName oname = new ObjectName(System.getProperty("logging.async.jmxObjectName", "logstash-gelf:type=Logging,name=AsyncLogging"));
                 MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
                 mbs.registerMBean(this, oname);
             } catch (Exception e) {
