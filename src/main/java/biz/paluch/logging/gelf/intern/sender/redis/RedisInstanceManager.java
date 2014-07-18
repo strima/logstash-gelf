@@ -27,6 +27,7 @@ enum RedisInstanceManager {
 
         if (!instances.containsKey(cleanConnectionString)) {
             JedisPoolManager.INSTANCE.getConfiguration().setMaxWaitMillis(RedisConfiguration.INSTANCE.getConnectionCreationTimeout());
+            JedisPoolManager.INSTANCE.getConfiguration().setMaxTotal(RedisConfiguration.INSTANCE.getMaxConnectionPoolSizePerInstance());
             Pool<Jedis> pool = JedisPoolManager.INSTANCE.getJedisPool(connectionURI, port);
             // TODO: Error-Logging konsolidieren
             int maxErrorCount = RedisConfiguration.INSTANCE.getMaxConnectionErrors();

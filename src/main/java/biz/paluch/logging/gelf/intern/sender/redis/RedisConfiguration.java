@@ -70,6 +70,15 @@ public enum RedisConfiguration {
      * (Defaults: roundrobin > 1 instances, Single instance == 1 instance)
      * @return
      */
+    public int getMaxConnectionPoolSizePerInstance() {
+        return Integer.parseInt(System.getProperty("logging.redis.maxconnectionsperinstance","8"));
+    }
+    
+    /**
+     * Defines the strategy to use for distribution to configured redis instances (roundrobin, failover, single)
+     * (Defaults: roundrobin > 1 instances, Single instance == 1 instance)
+     * @return
+     */
     public boolean isUnsentLoggerActivated() {
         return Boolean.parseBoolean(System.getProperty("logging.gelf.activateunsentlogger","false"));
     }
