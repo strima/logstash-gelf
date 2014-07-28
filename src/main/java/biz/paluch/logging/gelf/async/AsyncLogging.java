@@ -33,7 +33,7 @@ public enum AsyncLogging implements AsyncLoggingMBean {
     public void log(LogRecord record, LogHandler<LogRecord> handler) {
         this.strategy.log(record, handler);
     }
-
+    
     @Override
     public String getStrategy() {
         return System.getProperty("gelf.logging.async.strategy", "disruptor");
