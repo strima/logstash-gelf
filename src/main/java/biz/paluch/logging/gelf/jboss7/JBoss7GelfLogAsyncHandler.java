@@ -17,11 +17,8 @@ public class JBoss7GelfLogAsyncHandler extends JBoss7GelfLogHandler implements L
 
     @Override
     public void publish(LogRecord record) {
-       if(record instanceof ExtLogRecord) {
-           ((ExtLogRecord)record).copyAll();
-       } else {
-          record = ExtLogRecord.wrap(record);
-       }
+       record = ExtLogRecord.wrap(record);
+       ((ExtLogRecord)record).copyAll();
        AsyncLogging.INSTANCE.log(record, this);
     }
 
@@ -30,13 +27,6 @@ public class JBoss7GelfLogAsyncHandler extends JBoss7GelfLogHandler implements L
         super.publish(logEvent);
     }
 
-    @Override
-    protected GelfMessage createGelfMessage(LogRecord record) {
-        return getGelfMessageAssembler().createGelfMessage(new JBoss7AsyncLogEvent((ExtLogRecord)record));
-    }
-
-    private MdcGelfMessageAssembler getGelfMessageAssembler() {
-        return (MdcGelfMessageAssembler) gelfMessageAssembler;
-    }
+  
   
 }

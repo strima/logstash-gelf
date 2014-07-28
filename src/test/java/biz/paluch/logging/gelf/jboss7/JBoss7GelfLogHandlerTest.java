@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.apache.log4j.MDC;
+import org.jboss.logmanager.MDC;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,9 +27,7 @@ public class JBoss7GelfLogHandlerTest {
     @Before
     public void before() throws Exception {
         GelfTestSender.getMessages().clear();
-
         LogManager.getLogManager().reset();
-
         MDC.remove("mdcField1");
     }
 

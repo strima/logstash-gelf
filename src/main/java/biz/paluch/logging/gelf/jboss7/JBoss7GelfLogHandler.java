@@ -2,6 +2,8 @@ package biz.paluch.logging.gelf.jboss7;
 
 import java.util.logging.LogRecord;
 
+import org.jboss.logmanager.ExtLogRecord;
+
 import biz.paluch.logging.gelf.DynamicMdcMessageField;
 import biz.paluch.logging.gelf.GelfMessageAssembler;
 import biz.paluch.logging.gelf.MdcGelfMessageAssembler;
@@ -61,12 +63,17 @@ public class JBoss7GelfLogHandler extends biz.paluch.logging.gelf.jul.GelfLogHan
     }
 
     @Override
+    public void publish(LogRecord record) {
+        super.publish(ExtLogRecord.wrap(record));
+    }
+
+    @Override
     protected GelfMessageAssembler createGelfMessageAssembler() {
         return new MdcGelfMessageAssembler();
     }
 
     protected GelfMessage createGelfMessage(final LogRecord record) {
-        return getGelfMessageAssembler().createGelfMessage(new JBoss7JulLogEvent(record));
+        return getGelfMessageAssembler().createGelfMessage(new JBoss7JulLogEvent((ExtLogRecord)record));
     }
 
     public void setAdditionalFields(String fieldSpec) {
