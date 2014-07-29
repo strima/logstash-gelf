@@ -1,9 +1,5 @@
 package biz.paluch.logging.gelf.logback;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import biz.paluch.logging.gelf.DynamicMdcMessageField;
 import biz.paluch.logging.gelf.GelfUtil;
 import biz.paluch.logging.gelf.LogEvent;
@@ -15,6 +11,10 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.ThrowableProxy;
+
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:tobiassebastian.kaefer@1und1.de">Tobias Kaefer</a>
@@ -30,7 +30,7 @@ class LogbackLogEvent implements LogEvent {
 
     @Override
     public String getMessage() {
-        return loggingEvent.getMessage();
+        return loggingEvent.getFormattedMessage();
     }
 
     @Override
@@ -134,6 +134,13 @@ class LogbackLogEvent implements LogEvent {
                 return getSourceMethodName();
             case SourceSimpleClassName:
                 return GelfUtil.getSimpleClassName(getSourceClassName());
+            case LoggerName:
+                return loggingEvent.getLoggerName();
+            case Marker:
+                if (loggingEvent.getMarker() != null && !"".equals(loggingEvent.getMarker().toString())) {
+                    return loggingEvent.getMarker().toString();
+                }
+                return null;
         }
 
         throw new UnsupportedOperationException("Cannot provide value for " + field);
@@ -175,5 +182,10 @@ class LogbackLogEvent implements LogEvent {
         }
 
         return null;
+    }
+
+    @Override
+    public Set<String> getMdcNames() {
+        return getAllMdcNames();
     }
 }

@@ -10,8 +10,10 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.IllegalFormatException;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -154,7 +156,8 @@ public class JulLogEvent implements LogEvent {
                 return logRecord.getSourceMethodName();
             case SourceSimpleClassName:
                 return GelfUtil.getSimpleClassName(logRecord.getSourceClassName());
-
+            case LoggerName:
+                return logRecord.getLoggerName();
         }
 
         throw new UnsupportedOperationException("Cannot provide value for " + field);
@@ -163,5 +166,10 @@ public class JulLogEvent implements LogEvent {
     @Override
     public String getMdcValue(String mdcName) {
         return null;
+    }
+
+    @Override
+    public Set<String> getMdcNames() {
+        return Collections.EMPTY_SET;
     }
 }

@@ -1,6 +1,5 @@
 package biz.paluch.logging.gelf.intern.sender.redis;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import biz.paluch.logging.gelf.intern.ErrorReporter;

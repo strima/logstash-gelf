@@ -2,8 +2,6 @@ package biz.paluch.logging.gelf.intern.sender.redis;
 
 import java.io.IOException;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.util.Pool;
 import biz.paluch.logging.gelf.intern.ErrorReporter;
 import biz.paluch.logging.gelf.intern.GelfMessage;
 import biz.paluch.logging.gelf.intern.GelfSender;

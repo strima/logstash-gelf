@@ -4,10 +4,8 @@ import java.util.logging.LogRecord;
 
 import org.jboss.logmanager.ExtLogRecord;
 
-import biz.paluch.logging.gelf.MdcGelfMessageAssembler;
 import biz.paluch.logging.gelf.async.AsyncLogging;
 import biz.paluch.logging.gelf.async.LogHandler;
-import biz.paluch.logging.gelf.intern.GelfMessage;
 
 public class JBoss7GelfLogAsyncHandler extends JBoss7GelfLogHandler implements LogHandler<LogRecord> {
     

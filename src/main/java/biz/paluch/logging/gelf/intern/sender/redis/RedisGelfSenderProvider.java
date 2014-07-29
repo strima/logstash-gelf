@@ -3,12 +3,8 @@ package biz.paluch.logging.gelf.intern.sender.redis;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.util.Pool;
 import biz.paluch.logging.gelf.intern.ErrorReporter;
 import biz.paluch.logging.gelf.intern.GelfSender;
 import biz.paluch.logging.gelf.intern.GelfSenderConfiguration;
@@ -39,7 +35,7 @@ public class RedisGelfSenderProvider implements GelfSenderProvider {
             redisInstanceList.add(redisInstance);
         }
         final RedisDistributionStrategy redisClientStrategy = RedisDistributionStrategyFactory.createStrategy(redisInstanceList);
-        ErrorReporter wrappedErrorReport = new ErrorReporterWrapper(configuration.getErrorReport(), RedisConfiguration.INSTANCE.getMaxLoggedErrorsInMinute());
+        ErrorReporter wrappedErrorReport = new ErrorReporterWrapper(configuration.getErrorReporter(), RedisConfiguration.INSTANCE.getMaxLoggedErrorsInMinute());
 
         int maxRetries = RedisConfiguration.INSTANCE.getMaxConnectionRetries() > 0 ? RedisConfiguration.INSTANCE.getMaxConnectionRetries() :  redisInstanceList.size();;
         return new GelfRedisSender(new RedisConnectionManager(redisClientStrategy,maxRetries,wrappedErrorReport), wrappedErrorReport);

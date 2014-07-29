@@ -31,7 +31,6 @@
                 <include>redis.clients:jedis</include>
                 <include>org.apache.commons:commons-pool2</include>
                 <include>com.lmax:disruptor</include>
-                
             </includes>
         </dependencySet>
     </dependencySets>

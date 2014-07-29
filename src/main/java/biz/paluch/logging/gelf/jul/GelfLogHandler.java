@@ -1,5 +1,13 @@
 package biz.paluch.logging.gelf.jul;
 
+import static biz.paluch.logging.gelf.LogMessageField.NamedLogField.LoggerName;
+import static biz.paluch.logging.gelf.LogMessageField.NamedLogField.Severity;
+import static biz.paluch.logging.gelf.LogMessageField.NamedLogField.SourceClassName;
+import static biz.paluch.logging.gelf.LogMessageField.NamedLogField.SourceMethodName;
+import static biz.paluch.logging.gelf.LogMessageField.NamedLogField.SourceSimpleClassName;
+import static biz.paluch.logging.gelf.LogMessageField.NamedLogField.ThreadName;
+import static biz.paluch.logging.gelf.LogMessageField.NamedLogField.Time;
+
 import java.util.logging.ErrorManager;
 import java.util.logging.Filter;
 import java.util.logging.Handler;
@@ -9,11 +17,14 @@ import java.util.logging.Logger;
 
 import biz.paluch.logging.gelf.GelfMessageAssembler;
 import biz.paluch.logging.gelf.LogMessageField;
+import biz.paluch.logging.gelf.PropertyProvider;
 import biz.paluch.logging.gelf.StaticMessageField;
+import biz.paluch.logging.gelf.intern.Closer;
 import biz.paluch.logging.gelf.intern.ErrorReporter;
 import biz.paluch.logging.gelf.intern.GelfMessage;
 import biz.paluch.logging.gelf.intern.GelfSender;
 import biz.paluch.logging.gelf.intern.GelfSenderFactory;
+
 
 /**
  * Logging-Handler for GELF (Graylog Extended Logging Format). This Java-Util-Logging Handler creates GELF Messages and posts
@@ -50,19 +61,25 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
 
     public GelfLogHandler() {
         gelfMessageAssembler = createGelfMessageAssembler();
-        gelfMessageAssembler.addFields(LogMessageField.getDefaultMapping());
+
+        initializeDefaultFields();
 
         JulPropertyProvider propertyProvider = new JulPropertyProvider(GelfLogHandler.class);
         gelfMessageAssembler.initialize(propertyProvider);
 
-        final String level = propertyProvider.getProperty("level");
+        final String level = propertyProvider.getProperty(PropertyProvider.PROPERTY_LEVEL);
         if (null != level) {
             setLevel(Level.parse(level.trim()));
         } else {
             setLevel(Level.INFO);
         }
 
-        final String filter = propertyProvider.getProperty("filter");
+        final String additionalFields = propertyProvider.getProperty(PropertyProvider.PROPERTY_ADDITIONAL_FIELDS);
+        if (null != level) {
+            setAdditionalFields(additionalFields);
+        }
+
+        final String filter = propertyProvider.getProperty(PropertyProvider.PROPERTY_FILTER);
         try {
             if (null != filter) {
                 final Class clazz = ClassLoader.getSystemClassLoader().loadClass(filter);
@@ -77,19 +94,11 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
             setLogUnsent(Boolean.parseBoolean(logUnsentString));
         }
          
-        // This only used for testing
-        final String testSender = propertyProvider.getProperty("testSenderClass");
-        try {
-            if (null != testSender) {
-                final Class clazz = ClassLoader.getSystemClassLoader().loadClass(testSender);
-                gelfSender = (GelfSender) clazz.newInstance();
-            }
-        } catch (final Exception e) {
-            // ignore
-        }
-        
-        
+    }
 
+    protected void initializeDefaultFields() {
+        gelfMessageAssembler.addFields(LogMessageField.getDefaultMapping(Time, Severity, ThreadName, SourceClassName,
+                SourceMethodName, SourceSimpleClassName, LoggerName));
     }
 
     protected GelfMessageAssembler createGelfMessageAssembler() {
@@ -105,15 +114,20 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
         if (!isLoggable(record)) {
             return;
         }
-
-        if (null == gelfSender) {
-            gelfSender = GelfSenderFactory.createSender(gelfMessageAssembler, this);
+        try {
+            if (null == gelfSender) {
+                gelfSender = GelfSenderFactory.createSender(gelfMessageAssembler, this);
+            }
+        } catch (Exception e) {
+            reportError("Could not send GELF message: " + e.getMessage(), e, ErrorManager.OPEN_FAILURE);
+            return;
         }
 
         try {
             GelfMessage message = createGelfMessage(record);
             if (!message.isValid()) {
                 reportError("GELF Message is invalid: " + message.toJson(), null, ErrorManager.WRITE_FAILURE);
+                return;
             }
 
             if (null == gelfSender || !gelfSender.sendMessage(message)) {
@@ -135,7 +149,7 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
     @Override
     public void close() {
         if (null != gelfSender) {
-            gelfSender.close();
+            Closer.close(gelfSender);
             gelfSender = null;
         }
     }
@@ -242,17 +256,5 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
 
     public void setLogUnsent(boolean logUnsent) {
         this.logUnsent = logUnsent;
-    }
-
-    public void setTestSenderClass(String testSender) {
-        // This only used for testing
-        try {
-            if (null != testSender) {
-                final Class clazz = Class.forName(testSender);
-                gelfSender = (GelfSender) clazz.newInstance();
-            }
-        } catch (final Exception e) {
-            // ignore
-        }
     }
 }
