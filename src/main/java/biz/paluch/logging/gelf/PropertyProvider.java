@@ -23,6 +23,7 @@ public interface PropertyProvider {
     String PROPERTY_HOST = "host";
     String PROPERTY_PORT = "port";
 
+    String PROPERTY_PASSWORD = "password";
     String PROPERTY_ORIGIN_HOST = "originHost";
     String PROPERTY_EXTRACT_STACKTRACE = "extractStackTrace";
     String PROPERTY_FILTER_STACK_TRACE = "filterStackTrace";

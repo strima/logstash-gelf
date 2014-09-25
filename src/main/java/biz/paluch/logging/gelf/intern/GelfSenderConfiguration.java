@@ -19,6 +19,12 @@ public interface GelfSenderConfiguration {
 
     /**
      * 
+     * @return password string (optional, null if not provided)
+     */
+    String getPassword();
+
+    /**
+     * 
      * @return the ErrorReporter to report any errors
      */
     ErrorReporter getErrorReporter();

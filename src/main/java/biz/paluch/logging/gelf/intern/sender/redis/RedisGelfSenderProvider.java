@@ -31,7 +31,7 @@ public class RedisGelfSenderProvider implements GelfSenderProvider {
         final List<RedisInstance> redisInstanceList = new ArrayList<RedisInstance>();
         
         for(String singleConnection : singleConnectionList) {
-            RedisInstance redisInstance = RedisInstanceManager.INSTANCE.getRedisInstance(URI.create(singleConnection), configuration.getPort());
+            RedisInstance redisInstance = RedisInstanceManager.INSTANCE.getRedisInstance(URI.create(singleConnection), configuration.getPort(), configuration.getPassword());
             redisInstanceList.add(redisInstance);
         }
         final RedisDistributionStrategy redisClientStrategy = RedisDistributionStrategyFactory.createStrategy(redisInstanceList);

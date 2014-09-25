@@ -32,6 +32,11 @@ public final class GelfSenderFactory {
             }
 
             @Override
+            public String getPassword() {
+                return hostAndPortProvider.getPassword();
+            }
+
+            @Override
             public String getHost() {
                 return hostAndPortProvider.getHost();
             }

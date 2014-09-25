@@ -19,4 +19,10 @@ public interface HostAndPortProvider {
      * @return the port number.
      */
     int getPort();
+
+    /**
+     * 
+     * @return the password.
+     */
+    String getPassword();
 }

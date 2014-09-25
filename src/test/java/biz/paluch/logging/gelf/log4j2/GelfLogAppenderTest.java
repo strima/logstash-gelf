@@ -101,22 +101,22 @@ public class GelfLogAppenderTest {
 
     @Test
     public void testFactory() throws Exception {
-        GelfLogAppender result = GelfLogAppender.createAppender(null, null, null, null, null, null, null, null, null, null,
+        GelfLogAppender result = GelfLogAppender.createAppender(null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null);
 
         assertNull(result);
 
-        result = GelfLogAppender.createAppender("name", null, null, null, null, null, null, null, null, null, null, null, null,
+        result = GelfLogAppender.createAppender("name", null, null, null, null, null, null, null, null, null, null, null, null, null,
                 null);
 
         assertNull(result);
 
-        result = GelfLogAppender.createAppender("name", null, null, null, null, "host", null, null, null, null, null, null,
+        result = GelfLogAppender.createAppender("name", null, null, null, null, "host", null, null, null, null, null, null, null,
                 null, null);
 
         assertNotNull(result);
 
-        result = GelfLogAppender.createAppender("name", null, null, null, null, "host", null, null, null, null, "facility",
+        result = GelfLogAppender.createAppender("name", null, null, null, null, "host", null, null, null, null, null, "facility",
                 null, null, null);
 
         assertNotNull(result);

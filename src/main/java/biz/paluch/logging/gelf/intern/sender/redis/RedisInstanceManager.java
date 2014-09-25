@@ -18,7 +18,7 @@ enum RedisInstanceManager {
     
     private final Map<String, RedisInstance> instances = new HashMap<String, RedisInstance>();
 
-    public synchronized RedisInstance getRedisInstance(URI connectionURI, int port) {
+    public synchronized RedisInstance getRedisInstance(URI connectionURI, int port, String password) {
         
         String lowerCasedConnectionString = connectionURI.toString().toLowerCase();
         String cleanConnectionString = lowerCasedConnectionString.substring(0,lowerCasedConnectionString.length() - connectionURI.getFragment().length());
@@ -28,7 +28,7 @@ enum RedisInstanceManager {
         if (!instances.containsKey(cleanConnectionString)) {
             JedisPoolManager.INSTANCE.getConfiguration().setMaxWaitMillis(RedisConfiguration.INSTANCE.getConnectionCreationTimeout());
             JedisPoolManager.INSTANCE.getConfiguration().setMaxTotal(RedisConfiguration.INSTANCE.getMaxConnectionPoolSizePerInstance());
-            Pool<Jedis> pool = JedisPoolManager.INSTANCE.getJedisPool(connectionURI, port);
+            Pool<Jedis> pool = JedisPoolManager.INSTANCE.getJedisPool(connectionURI, port, password);
             // TODO: Error-Logging konsolidieren
             int maxErrorCount = RedisConfiguration.INSTANCE.getMaxConnectionErrors();
             RedisInstance connection = new RedisInstance(lowerCasedConnectionString,connectionURI.getFragment(),pool,maxErrorCount);

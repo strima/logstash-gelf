@@ -34,6 +34,7 @@ import biz.paluch.logging.gelf.intern.GelfMessage;
  * </ul>
  * </li>
  * <li>port (Optional): Port, default 12201</li>
+ * <li>password (Optional): Password, default null</li>
  * <li>originHost (Optional): Originating Hostname, default FQDN Hostname</li>
  * <li>extractStacktrace (Optional): Post Stack-Trace to StackTrace field, default false</li>
  * <li>filterStackTrace (Optional): Perform Stack-Trace filtering (true/false), default false</li>

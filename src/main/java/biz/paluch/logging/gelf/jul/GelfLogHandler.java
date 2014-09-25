@@ -39,6 +39,7 @@ import biz.paluch.logging.gelf.intern.GelfSenderFactory;
  * </ul>
  * </li>
  * <li>port (Optional): Port, default 12201</li>
+ * <li>password (Optional): Password, default null</li>
  * <li>originHost (Optional): Originating Hostname, default FQDN Hostname</li>
  * <li>extractStackTrace (Optional): Post Stack-Trace to StackTrace field, default false</li>
  * <li>filterStackTrace (Optional): Perform Stack-Trace filtering (true/false), default false</li>
@@ -133,7 +134,7 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
             if (null == gelfSender || !gelfSender.sendMessage(message)) {
                 reportError("Could not send GELF message", null, ErrorManager.WRITE_FAILURE);
                 if(logUnsent) {
-                    UNSENT_LOGGER.log(record);
+                    UNSENT_LOGGER.log(record.getLevel(),message.toJson());
                 }
             }
         } catch (Exception e) {
@@ -200,6 +201,14 @@ public class GelfLogHandler extends Handler implements ErrorReporter {
 
     public void setPort(int port) {
         gelfMessageAssembler.setPort(port);
+    }
+
+    public String getPassword() {
+        return gelfMessageAssembler.getPassword();
+    }
+
+    public void setPassword(String password) {
+        gelfMessageAssembler.setPassword(password);
     }
 
     public int getGraylogPort() {

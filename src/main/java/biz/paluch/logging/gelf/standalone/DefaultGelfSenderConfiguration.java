@@ -14,6 +14,7 @@ public class DefaultGelfSenderConfiguration implements GelfSenderConfiguration {
     private ErrorReporter errorReporter;
     private String host;
     private int port;
+    private String password;
 
     public DefaultGelfSenderConfiguration() {
         errorReporter = new Slf4jErrorReporter();
@@ -34,6 +35,11 @@ public class DefaultGelfSenderConfiguration implements GelfSenderConfiguration {
     }
 
     @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
     public ErrorReporter getErrorReporter() {
         return errorReporter;
     }
@@ -48,5 +54,9 @@ public class DefaultGelfSenderConfiguration implements GelfSenderConfiguration {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

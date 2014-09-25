@@ -28,6 +28,7 @@ public class GelfMessageAssembler implements HostAndPortProvider {
     private String host;
     private String originHost;
     private int port;
+    private String password;
     private String facility;
     private boolean extractStackTrace;
     private boolean filterStackTrace;
@@ -57,6 +58,7 @@ public class GelfMessageAssembler implements HostAndPortProvider {
             this.port = Integer.parseInt(port);
         }
 
+        password = propertyProvider.getProperty(PropertyProvider.PROPERTY_PASSWORD);
         originHost = propertyProvider.getProperty(PropertyProvider.PROPERTY_ORIGIN_HOST);
         extractStackTrace = "true".equalsIgnoreCase(propertyProvider.getProperty(PropertyProvider.PROPERTY_EXTRACT_STACKTRACE));
         filterStackTrace = "true".equalsIgnoreCase(propertyProvider.getProperty(PropertyProvider.PROPERTY_FILTER_STACK_TRACE));
@@ -216,6 +218,14 @@ public class GelfMessageAssembler implements HostAndPortProvider {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFacility() {

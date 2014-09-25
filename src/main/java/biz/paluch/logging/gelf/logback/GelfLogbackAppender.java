@@ -33,6 +33,7 @@ import ch.qos.logback.core.AppenderBase;
  * </ul>
  * </li>
  * <li>port (Optional): Port, default 12201</li>
+ * <li>password (Optional): Password, default null</li>
  * <li>originHost (Optional): Originating Hostname, default FQDN Hostname</li>
  * <li>extractStackTrace (Optional): Post Stack-Trace to StackTrace field, default false</li>
  * <li>filterStackTrace (Optional): Perform Stack-Trace filtering (true/false), default false</li>
@@ -171,6 +172,14 @@ public class GelfLogbackAppender extends AppenderBase<ILoggingEvent> implements 
 
     public void setPort(int port) {
         gelfMessageAssembler.setPort(port);
+    }
+
+    public String getPassword() {
+        return gelfMessageAssembler.getPassword();
+    }
+
+    public void setPassword(String password) {
+        gelfMessageAssembler.setPassword(password);
     }
 
     public String getFacility() {

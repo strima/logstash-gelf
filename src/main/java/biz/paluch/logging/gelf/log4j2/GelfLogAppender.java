@@ -42,6 +42,7 @@ import org.apache.logging.log4j.util.Strings;
  * </ul>
  * </li>
  * <li>port (Optional): Port, default 12201</li>
+ * <li>password (Optional): Password, default null</li>
  * <li>extractStackTrace (Optional): Post Stack-Trace to StackTrace field, default false</li>
  * <li>filterStackTrace (Optional): Perform Stack-Trace filtering (true/false), default false</li>
  * <li>mdcProfiling (Optional): Perform Profiling (Call-Duration) based on MDC Data. See <a href="#mdcProfiling">MDC
@@ -185,6 +186,7 @@ public class GelfLogAppender extends AbstractAppender implements ErrorReporter {
      * @param host
      * @param graylogPort
      * @param port
+     * @param password
      * @param extractStackTrace
      * @param facility
      * @param filterStackTrace
@@ -198,6 +200,7 @@ public class GelfLogAppender extends AbstractAppender implements ErrorReporter {
             @PluginElement("DynamicMdcFields") final GelfDynamicMdcLogFields[] dynamicFieldArray,
             @PluginAttribute("graylogHost") String graylogHost, @PluginAttribute("host") String host,
             @PluginAttribute("graylogPort") String graylogPort, @PluginAttribute("port") String port,
+            @PluginAttribute("password") String password,
             @PluginAttribute("extractStackTrace") String extractStackTrace,
             @PluginAttribute("includeFullMdc") String includeFullMdc, @PluginAttribute("facility") String facility,
             @PluginAttribute("filterStackTrace") String filterStackTrace, @PluginAttribute("mdcProfiling") String mdcProfiling,
@@ -233,6 +236,10 @@ public class GelfLogAppender extends AbstractAppender implements ErrorReporter {
 
         if (facility != null) {
             mdcGelfMessageAssembler.setFacility(facility);
+        }
+
+        if (password != null) {
+            mdcGelfMessageAssembler.setPassword(password);
         }
 
         if (extractStackTrace != null) {

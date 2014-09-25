@@ -25,14 +25,17 @@ enum JedisPoolManager {
         return configuration;
     }
 
-    public synchronized JedisPool getJedisPool(URI connectionURI, int configuredPort) {
+    public synchronized JedisPool getJedisPool(URI connectionURI, int configuredPort, String configuredPassword) {
         
         String lowerCasedConnectionString = connectionURI.toString().toLowerCase();
         String cleanConnectionString = lowerCasedConnectionString.substring(0,lowerCasedConnectionString.length() - connectionURI.getFragment().length());
         
         if (!pools.containsKey(cleanConnectionString)) {
 
-            String password = (connectionURI.getUserInfo() != null) ? connectionURI.getUserInfo().split(":", 2)[1] : null;
+            String password = configuredPassword;
+            if (connectionURI.getUserInfo() != null) {
+                password = connectionURI.getUserInfo().split(":", 2)[1];
+            }
             int database = Protocol.DEFAULT_DATABASE;
             if(connectionURI.getPath() != null && connectionURI.getPath().length() > 1) {
                 database = Integer.parseInt(connectionURI.getPath().split("/", 2)[1]);
@@ -42,7 +45,7 @@ enum JedisPoolManager {
                     getConfiguration(), 
                     connectionURI.getHost(), 
                     port,
-                    Protocol.DEFAULT_TIMEOUT, 
+                    10000, 
                     password, 
                     database);
             
