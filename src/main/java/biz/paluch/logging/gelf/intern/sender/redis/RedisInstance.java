@@ -108,7 +108,7 @@ public class RedisInstance {
 
         @Override
         public void close() {
-            redisInstance.getPool().returnResource(jedisClient);
+            redisInstance.getPool().returnResourceObject(jedisClient);
         }
 
         @Override
