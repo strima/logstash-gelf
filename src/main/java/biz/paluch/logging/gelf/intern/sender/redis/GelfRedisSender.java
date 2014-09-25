@@ -41,7 +41,11 @@ class GelfRedisSender implements GelfSender {
             return false;
         }  finally {
             if(redisConnection != null) {
-                redisConnection.close();
+                try {
+                    redisConnection.close();
+                } catch(Exception e) {
+                    errorReporter.reportError("Error on closing connection to redis instance "+redisConnection.getRedisKey(),e);
+                }
             }
         }
         return true;
